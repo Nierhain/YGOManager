@@ -1,0 +1,38 @@
+GET http://localhost:1337/cards
+
+###
+GET http://localhost:1337/updateCards
+###
+
+GET http://localhost:1337/collection
+
+###
+
+GET http://localhost:1337/collection?page=1&limit=7
+
+###
+
+GET http://localhost:1337/decks
+
+###
+POST http://localhost:1337/collection
+Content-Type: application/json
+
+{
+    "name": "Fluffal Bear",
+    "id": "03841833",
+    "amount": 2
+}
+
+###
+POST http://localhost:1337/decks
+Content-Type: application/json
+
+{
+    "name": "Crusadia",
+    "description": "Crusadia Deck",
+    "thumbnail": "https://storage.googleapis.com/ygoprodeck.com/pics/45002991.jpg",
+    "cards": [
+        {"name": "Crusadia Equimax", "id": "45002991", "deckType": "1", "amount": 3}
+    ]
+}
