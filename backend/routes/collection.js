@@ -14,7 +14,7 @@ router.get('/:id', getCardInCollection, async(req, res) => {
 
 router.post('/', validateRequestParams, async (req, res) => {
     const card = new Collection({
-        name: res.name,
+        name: res.cardName,
         id: req.body.id,
         amount: req.body.amount
     })
@@ -50,18 +50,19 @@ async function validateRequestParams(req, res, next) {
         console.log(req.body.id)
         if (typeof req.body.name === "undefined") {
             try {
-                card = await Card.find({id: req.body.id})
+                card = await Card.findOne({ id: req.body.id })
+                console.log(card)
                 if (card == null) {
                     return res.status(404).json({ message: "Cannot find card" });
                 }
             } catch (error) {
             res.status(400).json({ message: error.message });
             }
-            res.name = card.name
+            res.cardName = card.name
             
         } else {
-            res.name = req.body.name
-    }
+            res.cardName = req.body.name
+        }
     next();
 }
 
