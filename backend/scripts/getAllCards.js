@@ -23,10 +23,7 @@ const getAllCards = async (model) => {
 }
 
 function prepareID(id) {
-    if (id.length < 8) {
-        let padding = 8 - id.length
-        id = id.padStart(padding, '0')
-    }
+    return id.padStart(8, 0)
 }
 
 module.exports = getAllCards
