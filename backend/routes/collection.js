@@ -1,19 +1,20 @@
 const express = require('express')
 const router = express.Router()
 const Collection = require('../models/collection')
+const Card = require('../models/cards')
 const paginateResults = require('../middlewares/paginationMiddleware')
 
 router.get('/', paginateResults(Collection), async (req, res) => {
     res.json(res.paginatedResults)
 })
 
-router.get('/:id', getCard, async(req, res) => {
+router.get('/:id', getCardInCollection, async(req, res) => {
     res.json(res.card)
 })
 
-router.post('/', async (req,res) => {
+router.post('/', validateRequestParams, async (req, res) => {
     const card = new Collection({
-        name: req.body.name,
+        name: res.name,
         id: req.body.id,
         amount: req.body.amount
     })
@@ -25,7 +26,7 @@ router.post('/', async (req,res) => {
     }
 })
 
-router.patch('/:id', getCard, async(req, res) => {
+router.patch('/:id', getCardInCollection, async(req, res) => {
     if(req.body.amount != null) {
         res.card.amount = req.body.amount
     }
@@ -36,7 +37,7 @@ router.patch('/:id', getCard, async(req, res) => {
     }
 })
 
-router.delete('/:id', getCard, async (req, res) => {
+router.delete('/:id', getCardInCollection, async (req, res) => {
     try {
         await res.card.remove()
         res.json({message: 'card removed'})
@@ -45,7 +46,26 @@ router.delete('/:id', getCard, async (req, res) => {
     }   
 })
 
-async function getCard(req, res, next) {
+async function validateRequestParams(req, res, next) {
+        console.log(req.body.id)
+        if (typeof req.body.name === "undefined") {
+            try {
+                card = await Card.find({id: req.body.id})
+                if (card == null) {
+                    return res.status(404).json({ message: "Cannot find card" });
+                }
+            } catch (error) {
+            res.status(400).json({ message: error.message });
+            }
+            res.name = card.name
+            
+        } else {
+            res.name = req.body.name
+    }
+    next();
+}
+
+async function getCardInCollection(req, res, next) {
     try {
         card = await Collection.find((element) => {
             element.id == req.params.id
