@@ -23,7 +23,8 @@ const getAllCards = async (model) => {
 }
 
 function prepareID(id) {
-    return id.padStart(8, 0)
+    return id.toString().padStart(8, 0)
+    
 }
 
 module.exports = getAllCards
