@@ -1,45 +1,73 @@
 import React, { useState } from 'react';
 import './App.css';
-import { Layout, Menu, Breadcrumb } from 'antd';
-import Icon from '@mdi/react'
-import { mdiArchiveOutline, mdiCards, mdiInboxMultiple, mdiLogout } from '@mdi/js'
+import {  Layout, Menu, Breadcrumb, Image, Input, Col, Row } from 'antd';
+import Dashboard from './pages/Dashboard';
+import CardOverview from './pages/CardOverview';
+import UserCollection from './pages/UserCollection';
+import UserDecks from './pages/UserDecks';
+import Icon from '@mdi/react';
+import logo from './assets/logo.png';
+import { mdiArchiveOutline, mdiCards, mdiHome, mdiInboxMultiple,  mdiLogout } from '@mdi/js';
+import { BrowserRouter as Router, Switch , Route, Link } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
 const { Header, Content, Footer, Sider } = Layout;
-const { SubMenu } = Menu;
+const { Search } = Input;
+
+
+const queryClient = new QueryClient()
 
 const App = () => {
   const [collapsed, setCollapsed] = useState(false);
 
+
   return (
-    <div className="App">
+    <Router>
+      <QueryClientProvider client={queryClient}>
       <Layout style={{ minHeight: '100vh' }}>
-        <Sider collapsible collapsed={collapsed} onCollapse={() => setCollapsed(!collapsed)}>
+        <Sider collapsible collapsed={collapsed} onCollapse={() => setCollapsed(!collapsed)} className="shadow">
           <div className="logo">
-            
+            <Link to="/">
+              <Image src={logo} height="32px" preview={false} />
+            </Link>
           </div>
           <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-            <Menu.Item key="1" icon={<Icon path={mdiCards} size="1rem" />}>Card Overview</Menu.Item>
-            <Menu.Item key="2" icon={<Icon path={mdiArchiveOutline} size="1rem"/>}>Collection</Menu.Item>
-            <Menu.Item key="3" icon={<Icon path={mdiInboxMultiple} size="1rem" />}>Decks</Menu.Item>
-            <Menu.Item key="4" icon={<Icon path={mdiLogout} size="1rem" />}>Logout</Menu.Item>
+            <Menu.Item key="1" icon={<Icon path={mdiHome} size="1rem" className="inline-flex"/>}><Link to="/">Dashboard</Link></Menu.Item>
+            <Menu.Item key="2" icon={<Icon path={mdiCards} size="1rem" className="inline-flex"/>}><Link to="/cards">Card Overview</Link></Menu.Item>
+            <Menu.Item key="3" icon={<Icon path={mdiArchiveOutline} size="1rem" className="inline-flex" />}><Link to="/collection">Collection</Link></Menu.Item>
+            <Menu.Item key="4" icon={<Icon path={mdiInboxMultiple} size="1rem" className="inline-flex" />}><Link to="/decks">Decks</Link></Menu.Item>
+            <Menu.Item key="5" icon={<Icon path={mdiLogout} size="1rem" className="inline-flex" />}><Link to="/logout">Logout</Link></Menu.Item>
           </Menu>
         </Sider>
-        <Layout className="site-layout">
-          <Header className="site-layout-background" style={{ padding: 0 }} >
-            <h1>YGOManager</h1>
-          </Header>
-          <Content style={{ margin: '0 16px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
-            <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-              Bill is a cat.
-            </div>
+        <Layout>
+          <Header>
+                <Row align="stretch">
+                  <Col span={12} flex="auto" offset="6">
+                    <Search
+                      placeholder="Search card, passcode, type..."
+                      enterButton="Search"
+                      size="large"
+                      allowClear
+                      className="mt-3"
+                      />
+              </Col>
+              <Col span={1} offset="5">
+                    
+              </Col>
+                </Row>
+            </Header>
+          <Content>
+            <Breadcrumb ></Breadcrumb>
+            <Switch>
+              <Route path="/cards">
+                <CardOverview />
+              </Route>
+            </Switch>
           </Content>
-          <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+          <Footer style={{ textAlign: 'center' }}>YGOManager &copy;2021 - Created by <a href="https://www.nierhain.de">Nierhain</a></Footer>
         </Layout>
       </Layout>
-    </div>
+      </QueryClientProvider>
+    </Router>
   );
 }
 
