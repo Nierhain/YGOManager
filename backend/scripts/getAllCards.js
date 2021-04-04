@@ -5,7 +5,7 @@ const getAllCards = async (model) => {
         response.data.data.forEach((card) => {
             newEntry = {
                 name: card.name,
-                id: card.id,
+                id: prepareID(card.id),
                 image: card.card_images[0].image_url,
                 thumbnail: card.card_images[0].image_url_small,
                 effect: card.desc,
@@ -20,6 +20,13 @@ const getAllCards = async (model) => {
         })
     })
 
+}
+
+function prepareID(id) {
+    if (id.length < 8) {
+        let padding = 8 - id.length
+        id = id.padStart(padding, '0')
+    }
 }
 
 module.exports = getAllCards
