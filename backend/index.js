@@ -3,7 +3,7 @@ require('dotenv').config()
 const express = require('express');
 const mongoose = require('mongoose');
 const updateCardDB = require('./scripts/updateCardDB')
-
+const cors = require('cors')
 const app = express();
 const port = process.env.PORT;
 
@@ -15,7 +15,7 @@ db.once('open', async () => {
     updateCardDB()
 })
 app.use(express.json())
-
+app.use(cors())
 const cardsRouter = require('./routes/cards')
 app.use('/cards', cardsRouter)
 
