@@ -3,6 +3,8 @@ GET http://localhost:1337/cards
 ###
 GET http://localhost:1337/updateCards
 ###
+GET http://localhost:1337/forceUpdate
+###
 
 GET http://localhost:1337/collection
 

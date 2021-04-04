@@ -33,7 +33,11 @@ async function updateCardDB(){
     getAllCards(Card)
 }
 
-const triggerUpdate = async () => {
+const triggerUpdate = async (force) => {
+    if (force) {
+        updateCardDB()
+        return "db update forced"
+    }
     let updateResult = await shouldUpdate()
     if(updateResult){
         updateCardDB()

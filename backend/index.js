@@ -34,5 +34,9 @@ app.get('/updateCards', async (req, res) => {
     res.json(result)
 })
 
+app.get('/forceUpdate', async (req, res) => {
+    result = await updateCardDB(true)
+    res.json(result)
+})
 
 app.listen(port, () => console.log("listening on port: " + port))
