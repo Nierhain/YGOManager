@@ -60,6 +60,9 @@ const App = () => {
             <Switch>
               <Route path="/cards">
                 <CardOverview />
+                </Route>
+                <Route path="/collection">
+                <UserCollection />
               </Route>
             </Switch>
           </Content>
