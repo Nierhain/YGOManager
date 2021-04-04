@@ -25,6 +25,14 @@ Content-Type: application/json
 }
 
 ###
+POST http://localhost:1337/collection
+Content-Type: application/json
+
+{
+    "id": "03841833",
+    "amount": 3
+}
+###
 POST http://localhost:1337/decks
 Content-Type: application/json
 
