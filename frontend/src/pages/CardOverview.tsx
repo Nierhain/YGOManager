@@ -1,5 +1,5 @@
 import { useEffect, useState }from 'react'
-import { useQuery, useQueryClient,  } from 'react-query'
+import { useQuery, useQueryClient } from 'react-query'
 import { getCard, getCards } from '../scripts/api'
 import {Switch, Route, useRouteMatch} from 'react-router-dom'
 import { Card } from 'antd'
@@ -13,7 +13,7 @@ const CardOverview = () => {
     const [limit, setLimit] = useState(12);
     const { path, url } = useRouteMatch();
 
-    const { status, data, error, isFetching } = useQuery(['cards', page, limit], () => getCards(page, limit), { keepPreviousData: true, staleTime:5000 });
+    const { status, data } = useQuery(['cards', page, limit], () => getCards(page, limit), { keepPreviousData: true, staleTime:5000 });
 
     // useEffect(() => {
     //     queryClient.fetchQuery(['cards', page], () => getCards(page + 1, limit))
@@ -50,13 +50,8 @@ const CardOverview = () => {
     //   }{' '}
     //     </div>
         <div className="container mx-auto">
-            <Switch>
-                <Route exact path="/cards">
                     {status === 'loading' ? (<Card loading={true}/>) : <GridOverview data={data.cards} routeURL="/cards/" type="card" limit={limit} onSizeChange={onLimitChange} onPageChange={onPageChange} page={page} totalItems={data.totalItems} />
                     }
-                </Route>
-                <Route exact path="/cards/:id" component={SingleCard}/>
-            </Switch>
         </div>
     )
 }

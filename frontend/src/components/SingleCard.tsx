@@ -1,21 +1,14 @@
 import { Breadcrumb, Card, Image, Typography, Row, Col, Divider, Button } from 'antd'
 import { useEffect, useState } from 'react'
 import { match, RouteComponentProps, withRouter } from 'react-router-dom'
-import { getCard } from '../scripts/api'
-import { useQuery, useQueryClient } from 'react-query'
+import { getCard, getAmountInCollection, updateCardinCollection, addCardToCollection } from '../scripts/api'
+import { useQuery, useQueryClient, useMutation } from 'react-query'
 const { Meta } = Card
 const { Text, Title } = Typography
-type props = {
-    name: string,
+
+type collectionParameter = {
     id: string,
-    image: string,
-    effect: string,
-    type: string,
-    attribute: string,
-    race: string,
-    level: number,
-    atk: number,
-    def: number
+    amount: number
 }
 
 type CardParams = {
@@ -24,19 +17,47 @@ type CardParams = {
 
 type cardProps = RouteComponentProps<CardParams>
 
+
 const SingleCard = ({ match }: cardProps) => {
     const queryClient = useQueryClient()
-    const {isLoading, data} = useQuery(['singleCard', match.params.id], () => getCard(match.params.id))
+    const { isLoading: isCardLoading, data } = useQuery(['singleCard', match.params.id], () => getCard(match.params.id))
+    const { isLoading: isCollectionAmountLoading, data: amount } = useQuery(['amount', match.params.id], () => getAmountInCollection(match.params.id))
+    const { mutateAsync: mutateAmount } = useMutation('updateAmount', (newAmount: collectionParameter) => updateCardinCollection(newAmount.id, newAmount.amount), {
+        onSuccess: () => {
+            queryClient.invalidateQueries('amount')
+        },
+    })
+    const { mutateAsync: addCard } = useMutation('addCard', (newCard: collectionParameter) => addCardToCollection(newCard.id, newCard.amount), {
+        onSuccess: () => {
+            queryClient.invalidateQueries('amount')
+        }
+    })
     
-    useEffect(() => {
-        queryClient.fetchQuery('singleCard')
-    }, [isLoading, data, queryClient])
-    
+    // useEffect(() => {
+    //     queryClient.fetchQuery('singleCard')
+    // }, [isCardLoading, data, queryClient])
+
+    // useEffect(() => {
+    //     queryClient.fetchQuery('amount')
+    // }, [isCollectionAmountLoading, amount, queryClient])
+
+    const increaseAmount = () => {
+        if (amount === 0) {
+            addCard({id: data.id, amount: 1})
+        } else {
+            mutateAmount({id: data.id, amount: amount + 1})
+        }
+    }
+
+    const decreaseAmount = () => {
+        mutateAmount({id: data.id, amount: amount - 1})
+    }
+
     return (
         <div className="container mx-auto">
             <div className="grid grid-cols-1 gap-4 p-8">
-                {isLoading ? <Card loading={true} /> : 
-                    <>
+                {isCardLoading ? <Card loading={true} /> : 
+                    
                     <div className="bg-gray-900 rounded-lg border-gray-900 border">
                         <Row justify="center">
                             <Title level={2}>{data.name}</Title>
@@ -48,7 +69,7 @@ const SingleCard = ({ match }: cardProps) => {
                             }
                         </Row>
                         <Row align="middle">
-                            <Col span={6} offset={5}>
+                            <Col span={6} offset={5} className="">
                                 <div>
                                 <Image src={data.image} preview={ false }/>
                                 </div>
@@ -61,12 +82,22 @@ const SingleCard = ({ match }: cardProps) => {
                             </Col>
                         </Row>
                     </div>
-
-                    <div className="bg-gray-900 rounded-lg border-gray-900 border">
-                            <Divider>Collected:</Divider>
-                            <Button>-</Button>  <Button>+</Button>
-                        </div>
-                    </>}
+                    }
+                
+                {isCollectionAmountLoading ? <Card loading={true} /> :
+                    <Row justify="end">
+                        <Col span={4}>
+                            <div className="bg-gray-900 rounded-lg border-gray-900 border">
+                            <Divider>Collected: {amount}</Divider>
+                            <Row className="p-1" justify="center">
+                                <Col span={12}>
+                                    <Button onClick={decreaseAmount}>-</Button><Button onClick={increaseAmount}>+</Button>
+                                </Col>
+                            </Row>
+                            </div>
+                        </Col>
+                    </Row>
+                }
             </div>
         </div>
     )

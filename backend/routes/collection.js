@@ -58,11 +58,9 @@ router.delete('/:id', getCardInCollection, async (req, res) => {
 })
 
 async function validateRequestParams(req, res, next) {
-        console.log(req.body.id)
         if (typeof req.body.name === "undefined") {
             try {
                 card = await Card.findOne({ id: req.body.id })
-                console.log(card)
                 if (card == null) {
                     return res.status(404).json({ message: "Cannot find card" });
                 }
@@ -79,7 +77,7 @@ async function validateRequestParams(req, res, next) {
 
 async function getCardInCollection(req, res, next) {
     try {
-        card = await Collection.findOne({id: req.body.id})
+        card = await Collection.findOne({id: req.params.id})
         if(card == null){
             return res.status(404).json({message: 'Cannot find card'})
         }

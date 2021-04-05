@@ -40,7 +40,11 @@ const addCardToCollection = async (id: string, amount: number, name ?: string) =
 }
 
 const updateCardinCollection = async (id: string, amount: number) => {
-    return axios.patch(collectionPath + id, { id: id, amount: amount})
+    if (amount <= 0) {
+        return axios.delete(collectionPath + '/' + id)
+    } else {
+        return axios.patch(collectionPath + '/' +id, { id: id, amount: amount})
+    }
 }
 
 const addDeck = async (name: string, cards: Array<Object>, description?: string, thumbnail?: string) => {
@@ -55,7 +59,18 @@ const addDeck = async (name: string, cards: Array<Object>, description?: string,
 }
 
 const updateDeck = async (id: string, deck: object) => {
-    return axios.patch(decksPath + id, deck)
+    return axios.patch(decksPath + '/' + id, deck)
 }
 
-export {getCards, getCard, getCollection, getDeck, getDecks, addCardToCollection, addDeck, updateCardinCollection, updateDeck}
+const searchCards = async (query: string, page?: number, limit?: number) => {
+    let searchPath = cardsPath + query
+    if (page) {
+        searchPath = searchPath + '&page=' + page
+    }
+    if (limit) {
+        searchPath = searchPath + '&limit=' + limit
+    }
+    return (await axios.get(searchPath)).data
+}
+
+export {getCards, getCard, getCollection, getAmountInCollection, getDeck, getDecks, addCardToCollection, addDeck, updateCardinCollection, updateDeck, searchCards}
