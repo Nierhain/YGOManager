@@ -9,7 +9,7 @@ router.get('/', paginateResults(Card), async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const card = await Card.find({id: req.params.id})
+        const card = await Card.findOne({id: req.params.id})
         if(card == null){
         return res.status(404).json("Cannot find card")
        }
