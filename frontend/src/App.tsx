@@ -8,7 +8,7 @@ import UserDecks from './pages/UserDecks';
 import Icon from '@mdi/react';
 import logo from './assets/logo.png';
 import { mdiArchiveOutline, mdiCards, mdiHome, mdiInboxMultiple,  mdiLogout } from '@mdi/js';
-import { BrowserRouter as Router, Switch , Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch , Route, Link, useParams } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 const { Header, Content, Footer, Sider } = Layout;
 const { Search } = Input;
@@ -18,8 +18,6 @@ const queryClient = new QueryClient()
 
 const App = () => {
   const [collapsed, setCollapsed] = useState(false);
-
-
   return (
     <Router>
       <QueryClientProvider client={queryClient}>
@@ -56,8 +54,7 @@ const App = () => {
                 </Row>
             </Header>
           <Content>
-            <Breadcrumb ></Breadcrumb>
-            <Switch>
+              <Switch>
               <Route path="/cards">
                 <CardOverview />
                 </Route>
