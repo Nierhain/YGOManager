@@ -1,7 +1,7 @@
-import { Button, Col, Row, Table, Space, Modal, InputNumber, Input, Form } from 'antd';
-import Text from 'antd/lib/typography/Text';
+import { Button, Col, Row, Table, Modal, InputNumber, Input, Form } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query';
+import HelmetFactory from '../components/HelmetFactory';
 import { getCollection, addCardToCollection } from '../scripts/api';
 
 const UserCollection = () => {
@@ -14,12 +14,14 @@ const UserCollection = () => {
     const [amount, setAmount] = useState(1);
     const [cardName, setCardName] = useState(' ');
     const [cardList, setCardList] = useState(' ');
+    const [selectedRows, setSelectedRows] = useState<Array<React.Key>>()
 
-    const { status, data, error, isFetching } = useQuery('cards', getCollection, { keepPreviousData: true, staleTime:5000 });
+
+    const { data } = useQuery('cards', getCollection, { keepPreviousData: true, staleTime:5000 });
 
     useEffect(() => {
         queryClient.fetchQuery('cards', getCollection)
-    }, [])
+    }, [data, queryClient])
 
     const columns = [
         { title: 'Name', dataIndex: 'name', key: 'name' },
@@ -29,7 +31,7 @@ const UserCollection = () => {
 
     const handleOk = () => {
         
-        // addCardToCollection(id, amount, name?)
+        // addCardToCollection(id, amount)
         setIsAddDialogVisible(false)
     }
 
@@ -44,6 +46,21 @@ const UserCollection = () => {
         setIsAddDialogVisible(false)
     }
 
+    const handleOnDelete = () => {
+
+    }
+    
+    const onSelectChange = (selectedRowKeys: React.Key[]) => {
+        setSelectedRows(selectedRowKeys)
+    }
+
+    const rowSelection = {
+        selectedRowKeys: selectedRows ,
+        onChange: onSelectChange
+    }
+
+    const isSelected = selectedRows ? selectedRows.length > 0 : false
+
     const layout = {
         labelCol: { span: 8 },
         wrapperCol: { span: 16 }
@@ -53,20 +70,25 @@ const UserCollection = () => {
         wrapperCol: { offset: 8, span: 16 },
     };
 
+    const AddButtons = () => {
+        return <Row justify="space-between" gutter={12}>
+            <Col>
+                <Button type="primary" onClick={handleOnDelete} disabled={!isSelected} className="mr-2">Delete</Button>
+                <Button type="primary" onClick={handleOnDelete} disabled={!isSelected}>Change Amount</Button>
+            </Col>
+            <Col>
+                    <Button type="primary" onClick={() => setIsAddDialogVisible((isVisible) => !isVisible)} className="mr-2">Add Card(s)</Button>
+                    <Button type="primary" onClick={() => setIsAddListDialogVisible((isVisible) => !isVisible)}>Add List</Button>
+            </Col>
+        </Row>   
+    }
+
     return (
         <>
+            <HelmetFactory title="Collection"/>
             <Row justify="center" className="mt-12">
                 <Col span={18}>
-                    <Table dataSource={data} columns={columns} pagination={false} title={() =>
-                        <Row justify="end" gutter={12}>
-                            <Col>
-                                <Button type="primary" onClick={() => setIsAddDialogVisible((isVisible) => !isVisible)}>Add Card(s)</Button>
-                            </Col>
-                            <Col>
-                                <Button type="primary" onClick={() => setIsAddListDialogVisible((isVisible) => !isVisible)}>Add List</Button>
-                            </Col>
-                        </Row>
-                    } />
+                    <Table dataSource={data} columns={columns} pagination={false} rowKey="id" rowSelection={rowSelection} title={AddButtons}/>
                 </Col>
             </Row>
             <Modal forceRender title="Add Card" centered visible={isAddDialogVisible} onOk={handleOk} onCancel={handleCancel} confirmLoading={confirmLoading}>

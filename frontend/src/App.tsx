@@ -1,27 +1,24 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import {  Layout, Menu, Breadcrumb, Image, Input, Col, Row } from 'antd';
-import Dashboard from './pages/Dashboard';
+import {  Layout, Menu,  Image, Col, Row } from 'antd';
 import CardOverview from './pages/CardOverview';
 import UserCollection from './pages/UserCollection';
-import UserDecks from './pages/UserDecks';
+
 import CardSearch from './pages/CardSearch'
-import SingleCard from './components/SingleCard'
+import SingleCard from './components/CardSingle'
 import Icon from '@mdi/react';
 import logo from './assets/logo.png';
 import { mdiArchiveOutline, mdiCards, mdiHome, mdiInboxMultiple,  mdiLogout } from '@mdi/js';
-import { BrowserRouter as Router, Switch , Route, Link, useHistory } from 'react-router-dom';
+import { BrowserRouter as Router, Switch , Route, Link } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import SearchBar from './components/SearchBar';
 const { Header, Content, Footer, Sider } = Layout;
-const { Search } = Input;
+
 
 const queryClient = new QueryClient()
 
 const App = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [searchString, setSearchString] = useState('');
-  const history = useHistory();
 
   return (
     <Router>
@@ -45,7 +42,7 @@ const App = () => {
           <Header>
                 <Row align="stretch">
                   <Col span={12} flex="auto" offset="6">
-                  <SearchBar setSearchString={setSearchString}/>
+                  <SearchBar/>
               </Col>
               <Col span={1} offset="5">
                     

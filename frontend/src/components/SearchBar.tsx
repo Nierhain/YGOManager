@@ -2,10 +2,8 @@ import { useHistory } from 'react-router-dom'
 import { Input } from 'antd'
 const { Search } = Input
 
-type props = {
-    setSearchString: (value: string) => void
-}
-const SearchBar = (props: props) => {
+
+const SearchBar = () => {
     const history = useHistory();
 
     const onSearch = (value: string) => {

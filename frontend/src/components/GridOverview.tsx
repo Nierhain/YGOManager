@@ -26,7 +26,7 @@ const GridOverview = (props: props) => {
                 <div className="grid grid-cols-6 gap-4 mt-12">
                 {props.data.map((card) => {
                     return (
-                        <Link to={props.routeURL + card.id} >
+                        <Link to={props.routeURL + card.id} key={card.id}>
                             <Card
                             onClick={() => {}}
                                 hoverable

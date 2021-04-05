@@ -1,17 +1,14 @@
 import { useEffect, useState }from 'react'
 import { useQuery, useQueryClient } from 'react-query'
-import { getCard, getCards } from '../scripts/api'
-import {Switch, Route, useRouteMatch} from 'react-router-dom'
+import { getCards } from '../scripts/api'
 import { Card } from 'antd'
 import GridOverview from '../components/GridOverview'
-import SingleCard from '../components/SingleCard'
-
+import HelmetFactory from '../components/HelmetFactory'
 
 const CardOverview = () => {
     const queryClient = useQueryClient()
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(12);
-    const { path, url } = useRouteMatch();
 
     const { status, data } = useQuery(['cards', page, limit], () => getCards(page, limit), { keepPreviousData: true, staleTime:5000 });
 
@@ -50,6 +47,7 @@ const CardOverview = () => {
     //   }{' '}
     //     </div>
         <div className="container mx-auto">
+            <HelmetFactory title="Card Overview"/>
                     {status === 'loading' ? (<Card loading={true}/>) : <GridOverview data={data.cards} routeURL="/cards/" type="card" limit={limit} onSizeChange={onLimitChange} onPageChange={onPageChange} page={page} totalItems={data.totalItems} />
                     }
         </div>

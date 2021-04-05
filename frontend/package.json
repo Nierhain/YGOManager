@@ -21,6 +21,7 @@
     "react": "^17.0.2",
     "react-css-theme-switcher": "^0.2.3",
     "react-dom": "^17.0.2",
+    "react-helmet": "^6.1.0",
     "react-query": "^3.13.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
@@ -52,6 +53,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss7-compat": "^2.0.4",
+    "@types/react-helmet": "^6.1.0",
     "@types/react-router-dom": "^5.1.7",
     "autoprefixer": "^9.8.6",
     "postcss": "^7.0.35",

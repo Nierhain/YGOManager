@@ -1,9 +1,8 @@
-import { Breadcrumb, Card, Image, Typography, Row, Col, Divider, Button } from 'antd'
-import { useEffect, useState } from 'react'
-import { match, RouteComponentProps, withRouter } from 'react-router-dom'
+import { Card, Image, Typography, Row, Col, Divider, Button } from 'antd'
+import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { getCard, getAmountInCollection, updateCardinCollection, addCardToCollection } from '../scripts/api'
 import { useQuery, useQueryClient, useMutation } from 'react-query'
-const { Meta } = Card
+import HelmetFactory from './HelmetFactory'
 const { Text, Title } = Typography
 
 type collectionParameter = {
@@ -55,10 +54,12 @@ const SingleCard = ({ match }: cardProps) => {
 
     return (
         <div className="container mx-auto">
+            
             <div className="grid grid-cols-1 gap-4 p-8">
                 {isCardLoading ? <Card loading={true} /> : 
                     
                     <div className="bg-gray-900 rounded-lg border-gray-900 border">
+                        <HelmetFactory title={data.name}/>
                         <Row justify="center">
                             <Title level={2}>{data.name}</Title>
                         </Row>
