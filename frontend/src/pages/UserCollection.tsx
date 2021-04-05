@@ -5,6 +5,8 @@ import { useQuery, useQueryClient } from 'react-query';
 import { getCollection, addCardToCollection } from '../scripts/api';
 
 const UserCollection = () => {
+    const [addCard] = Form.useForm();
+    const [addList] = Form.useForm();
     const queryClient = useQueryClient()
     const [isAddDialogVisible, setIsAddDialogVisible] = useState(false)
     const [isAddListDialogVisible, setIsAddListDialogVisible] = useState(false)
@@ -26,7 +28,8 @@ const UserCollection = () => {
     ]
 
     const handleOk = () => {
-
+        
+        // addCardToCollection(id, amount, name?)
         setIsAddDialogVisible(false)
     }
 
@@ -71,6 +74,7 @@ const UserCollection = () => {
                     // {...layout}
                     layout="inline"
                     name="addCard"
+                    form={addCard}
                 >
                     <Form.Item
                     label="Card Passcode"
@@ -104,6 +108,7 @@ const UserCollection = () => {
                 
                 <Form
                     name="addCardList"
+                    form={addList}
                 >
                     <Form.Item
                     name="cardList"
