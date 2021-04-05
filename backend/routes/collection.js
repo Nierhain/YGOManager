@@ -8,8 +8,18 @@ router.get('/', paginateResults(Collection), async (req, res) => {
     res.json(res.paginatedResults)
 })
 
-router.get('/:id', getCardInCollection, async(req, res) => {
-    res.json(res.card)
+router.get('/:id', async (req, res) => {
+    try {
+        card = await Collection.findOne({ id: req.params.id })
+        if (card == null) {
+            res.json(0)
+        } else {
+            res.json(card.amount)
+        } 
+    } catch (err) {
+        res.status(500).json({message: err.message})
+    }
+    
 })
 
 router.post('/', validateRequestParams, async (req, res) => {
