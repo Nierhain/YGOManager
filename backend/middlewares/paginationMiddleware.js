@@ -5,7 +5,7 @@ const paginateResults = (model) => {
         const limit = parseInt(req.query.limit) || 5
         
         const startIndex = (page - 1) * limit
-        const totalItems = model.estimatedDocumentCount()
+        const totalItems = await model.estimatedDocumentCount().exec()
         
         try {
             res.paginatedResults = await model.find().limit(limit).skip(startIndex).exec()
