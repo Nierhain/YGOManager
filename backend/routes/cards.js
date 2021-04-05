@@ -4,7 +4,7 @@ const Card = require('../models/cards')
 const paginateResults = require('../middlewares/paginationMiddleware')
 
 router.get('/', paginateResults(Card), async (req, res) => {
-    res.json({page: res.page, limit: res.limit, cards: res.paginatedResults, })
+    res.json({page: res.page, limit: res.limit, totalItems: res.totalItems, cards: res.paginatedResults, })
 })
 
 router.get('/:id', async (req, res) => {
