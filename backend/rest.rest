@@ -27,7 +27,14 @@ Content-Type: application/json
     "id": "03841833",
     "amount": 2
 }
+###
+PATCH http://localhost:1337/collection/03841833
+Content-Type: application/json
 
+{
+    "id": "03841833",
+    "amount": 1
+}
 ###
 POST http://localhost:1337/collection
 Content-Type: application/json

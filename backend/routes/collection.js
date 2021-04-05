@@ -42,6 +42,7 @@ router.patch('/:id', getCardInCollection, async(req, res) => {
     }
     try {
         const updatedCard = await res.card.save()
+        res.json(updatedCard)
     } catch (err){
         res.status(400).json({message: err.message})
     }
@@ -78,9 +79,7 @@ async function validateRequestParams(req, res, next) {
 
 async function getCardInCollection(req, res, next) {
     try {
-        card = await Collection.find((element) => {
-            element.id == req.params.id
-        })
+        card = await Collection.findOne({id: req.body.id})
         if(card == null){
             return res.status(404).json({message: 'Cannot find card'})
         }
