@@ -9,7 +9,9 @@ const SearchBar = (props: props) => {
     const history = useHistory();
 
     const onSearch = (value: string) => {
-        history.push('/search?search=' + value)
+        if (value !== "") {   
+            history.push('/search?search=' + value)
+        }
     }
     return (
         <Search
