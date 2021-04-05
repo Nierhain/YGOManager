@@ -11,12 +11,17 @@ const getCards = async (page: number, limit: number) => {
 }
 
 const getCard = async (id: string) => {
-    let result = await axios.get(cardsPath + id)
+    let result = await axios.get(cardsPath + '/' +id)
     return result.data
 }
 
 const getCollection = async () => {
     let result = await axios.get(collectionPath)
+    return result.data
+}
+
+const getAmountInCollection = async (id: string) => {
+    let result = await axios.get(collectionPath + '/' + id)
     return result.data
 }
 
