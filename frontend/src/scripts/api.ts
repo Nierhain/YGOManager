@@ -30,8 +30,12 @@ const getDeck = async (name: string) => {
     return result.data
 }
 
-const addCardToCollection = async (name: string, id: string, amount: number) => {
+const addCardToCollection = async (id: string, amount: number, name ?: string) => {
     return axios.post(collectionPath, { "name": name, "id": id, "amount": amount })
+}
+
+const updateCardinCollection = async (id: string, amount: number) => {
+    return axios.patch(collectionPath + id, { id: id, amount: amount})
 }
 
 const addDeck = async (name: string, cards: Array<Object>, description?: string, thumbnail?: string) => {
@@ -45,4 +49,8 @@ const addDeck = async (name: string, cards: Array<Object>, description?: string,
     return axios.post(decksPath, postData)
 }
 
-export {getCards, getCard, getCollection, getDeck, getDecks, addCardToCollection, addDeck}
+const updateDeck = async (id: string, deck: object) => {
+    return axios.patch(decksPath + id, deck)
+}
+
+export {getCards, getCard, getCollection, getDeck, getDecks, addCardToCollection, addDeck, updateCardinCollection, updateDeck}
