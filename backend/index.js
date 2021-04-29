@@ -8,6 +8,7 @@ const app = express();
 const port = process.env.PORT;
 
 mongoose.connect(process.env.DB_HOST, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.set('useFindAndModify', false)
 const db = mongoose.connection
 
 db.on('error', (e) => {console.error(error)})

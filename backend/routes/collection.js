@@ -31,10 +31,48 @@ router.post('/', validateRequestParams, async (req, res) => {
     try {
         const newCard = await card.save()
         res.status(201).json(newCard)
-    } catch (err){
-        res.status(400).json({message: err.message})
+    } catch (err) {
+        res.status(400).json({ message: err.message })
     }
-})
+});
+
+router.post("/list", async (req, res) => {
+    let failedIds = [];
+    let addedIds = [];
+    if (req.body.data === null || typeof req.body.data === 'undefined') {
+        res.status(400).json("something happened")
+        return
+    }
+    for (const card of req.body.data) {
+        const queriedCard = await Card.findOne({ "id": card.id }).exec()
+        if (queriedCard === null) {
+            failedIds.push(card.id)
+            continue
+        }
+        isInCollection = await checkCollection(queriedCard)
+        console.log("isInCollection:" + isInCollection)
+        if (isInCollection) {
+            const newCard = await Collection.findOneAndUpdate({ id: card.id }, { $inc: { 'amount': card.amount } }, { new: true })
+        } else {
+            const newCard = new Collection({
+                name: queriedCard.name,
+                id: card.id,
+                amount: card.amount,
+            });
+            try {
+                const isSaved = await newCard.save();
+                if (isSaved === newCard) {
+                    
+                }
+            } catch (err) {
+                res.status(500).json({message: err.message})
+            }
+        }
+        addedIds.push(card.id);
+    }
+
+    res.status(200).json({added: addedIds.length, failed: failedIds})
+});
 
 router.patch('/:id', getCardInCollection, async(req, res) => {
     if(req.body.amount != null) {
@@ -56,6 +94,24 @@ router.delete('/:id', getCardInCollection, async (req, res) => {
         res.status(500).json({message: err.message})
     }   
 })
+
+async function checkCollection(card) {
+    // console.log("card id: " + card.id)
+    if(card === null) return false
+    collected = await Collection.findOne({id: card.id})
+    // console.log("collected: " + collected)
+    return collected !== null
+}
+
+async function addCard(card) {
+    const newCard = new Collection({
+        name: card.name,
+        id: card.id,
+        amount: card.amount
+    })
+    newCard.save().exec()
+    return true
+}
 
 async function validateRequestParams(req, res, next) {
         if (typeof req.body.name === "undefined") {
