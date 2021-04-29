@@ -10,7 +10,7 @@ router.get('/', paginateResults(Collection), async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        card = await Collection.findOne({ id: req.params.id })
+        card = await Collection.findOne({ id: req.params.id }).lean()
         if (card == null) {
             res.json(0)
         } else {

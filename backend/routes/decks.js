@@ -4,7 +4,7 @@ const Deck = require('../models/deck')
 
 router.get('/', async (req, res) => {
     try {
-        const decks = await Deck.find({})
+        const decks = await Deck.find({}).lean()
         res.json(decks)
     } catch(err){
         res.status(500).json({message: err.message})
@@ -42,7 +42,7 @@ async function getDeck(req, res, next) {
     try {
         deck = await Deck.find((element) => {
             element.id == req.params.id
-        })
+        }).lean()
         if(Deck == null){
             return res.status(404).json({message: 'Cannot find deck'})
         }

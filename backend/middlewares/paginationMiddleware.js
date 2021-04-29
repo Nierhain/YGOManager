@@ -14,6 +14,7 @@ const paginateResults = (model) => {
         .find({ name: { $regex: regex } })
         .limit(limit)
         .skip(startIndex)
+        .lean()
         .exec();
       res.page = page;
       res.limit = limit;
