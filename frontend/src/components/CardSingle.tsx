@@ -1,8 +1,9 @@
-import { Card, Image, Typography, Row, Col, Divider, Button } from 'antd'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
+import { Card, Image, Typography, Row, Col, Divider, Button, Breadcrumb } from 'antd'
+import { RouteComponentProps, withRouter, Link } from 'react-router-dom'
 import { getCard, getAmountInCollection, updateCardinCollection, addCardToCollection } from '../scripts/api'
 import { useQuery, useQueryClient, useMutation } from 'react-query'
 import HelmetFactory from './HelmetFactory'
+import BreadcrumbItem from 'antd/lib/breadcrumb/BreadcrumbItem'
 const { Text, Title } = Typography
 
 type collectionParameter = {
@@ -54,11 +55,19 @@ const SingleCard = ({ match }: cardProps) => {
 
     return (
         <div className="container mx-auto">
-            
+            <div className="mt-4 bg-aro shadow rounded">
+            <Breadcrumb>
+                    <BreadcrumbItem className="pl-2"><Link to="/cards">Card Overview</Link></BreadcrumbItem>
+                    {
+                        data &&
+                        <BreadcrumbItem><Link to={"/cards/" + data.id}>{data.name}</Link></BreadcrumbItem>
+                    }
+            </Breadcrumb>
+            </div>
             <div className="grid grid-cols-1 gap-4 p-8">
                 {isCardLoading ? <Card loading={true} /> : 
                     
-                    <div className="bg-gray-900 rounded-lg border-gray-900 border">
+                    <div className="bg-aro rounded-lg border-aro border shadow">
                         <HelmetFactory title={data.name}/>
                         <Row justify="center">
                             <Title level={2}>{data.name}</Title>
@@ -75,11 +84,16 @@ const SingleCard = ({ match }: cardProps) => {
                                 <Image src={data.image} preview={ false }/>
                                 </div>
                             </Col>
-                            <Col span={11} offset={1} className="rounded border-gray-800 border bg-gray-800">
+                            <Col span={11} offset={1} className="rounded bg-vonCount border border-vonCount shadow">
                                 <div className="p-4">
-
                                 <Text>{data.effect}</Text>
                                 </div>
+                                {
+                                    data.atk &&
+                                    <div className="p-4 float-right">
+                                    <Text>ATK/{data.atk}  DEF/{data.def}</Text>
+                                    </div>
+                                }
                             </Col>
                         </Row>
                     </div>
@@ -88,7 +102,7 @@ const SingleCard = ({ match }: cardProps) => {
                 {isCollectionAmountLoading ? <Card loading={true} /> :
                     <Row justify="end">
                         <Col span={4}>
-                            <div className="bg-gray-900 rounded-lg border-gray-900 border">
+                            <div className="bg-aro rounded-lg border-aro border shadow">
                             <Divider>Collected: {amount}</Divider>
                             <Row className="p-1" justify="center">
                                 <Col span={12}>

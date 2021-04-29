@@ -49,7 +49,7 @@ const App = () => {
               </Col>
                 </Row>
             </Header>
-          <Content>
+          <Content className="bg-nosferatu">
               <Switch>
               <Route path="/cards" exact>
                 <CardOverview />
@@ -61,7 +61,7 @@ const App = () => {
                 <Route path="/search" component={CardSearch}/>
             </Switch>
           </Content>
-          <Footer style={{ textAlign: 'center' }}>YGOManager &copy;2021 - Created by <a href="https://www.nierhain.de">Nierhain</a></Footer>
+          <Footer style={{ textAlign: 'center' }} className="bg-nosferatu">YGOManager &copy;2021 - Created by <a href="https://www.nierhain.de">Nierhain</a></Footer>
         </Layout>
       </Layout>
       </QueryClientProvider>

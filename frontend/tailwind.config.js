@@ -1,18 +1,17 @@
 const colors = require('tailwindcss/colors')
-
+const dracula = require('tailwind-dracula/colors')
 module.exports = {
   purge: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
   darkMode: 'class', // or 'media' or 'class'
   theme: {
     colors: {
-      gray: colors.gray,
-      pink: colors.fuchsia,
-      purple: colors.purple
     },
     extend: {},
   },
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-dracula')(),
+  ],
 };
