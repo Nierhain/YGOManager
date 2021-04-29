@@ -22,6 +22,9 @@ app.use('/cards', cardsRouter)
 const collectionRouter = require('./routes/collection')
 app.use('/collection', collectionRouter)
 
+const checkRouter = require('./routes/check')
+app.use('/check', checkRouter)
+
 const decksRouter = require('./routes/decks');
 app.use('/decks', decksRouter)
 
