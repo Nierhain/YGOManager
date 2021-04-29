@@ -2,7 +2,8 @@ import { Button, Col, Row, Table, Modal, InputNumber, Input, Form } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query';
 import HelmetFactory from '../components/HelmetFactory';
-import { getCollection, addCardToCollection } from '../scripts/api';
+import { getCollection, addCardToCollection, addListToCollection } from '../scripts/api';
+import { sortAlphabetically } from '../scripts/utility';
 
 const UserCollection = () => {
     const [addCard] = Form.useForm();
@@ -24,30 +25,50 @@ const UserCollection = () => {
     }, [data, queryClient])
 
     const columns = [
-        { title: 'Name', dataIndex: 'name', key: 'name' },
+        { title: 'Name', dataIndex: 'name', key: 'name', sorter:  sortAlphabetically},
         { title: 'Passcode', dataIndex: 'id', key: 'id' },
         { title: 'Amount in collection', dataIndex: 'amount', key: 'amount'}
     ]
 
     const handleOk = () => {
-        
         // addCardToCollection(id, amount)
         setIsAddDialogVisible(false)
     }
 
     const handleListOk = () => {
+        let parsedCollection: { id: string, amount: number}[] = [];
+        let inputString = cardList;
+        let inputArray: string[] = [];
 
+        inputString = trimString(inputString)
+        inputArray = inputString.split(',')
+        inputArray.forEach((element) => {
+            parsedCollection.push({id: element.slice(2), amount: parseInt(element.slice(0, 1))})
+        })
+
+        addListToCollection(parsedCollection)
     }
 
     const handleCancel = () => {
-        setCardName('')
-        setCardList('')
+        setCardName((prevCardName) => '')
+        setCardList((prevCardList) => '')
+        addCard.resetFields()
+        addList.resetFields()
         setIsAddListDialogVisible(false)
         setIsAddDialogVisible(false)
     }
 
-    const handleOnDelete = () => {
+    const handleDeleteButton = () => {
 
+    }
+
+    const handleChangeAmount = () => {
+
+    }
+
+    const trimString = (input: string) => {
+        let outputString = input.replace(/\s/g, ',')
+        return outputString.replace(/x,/g, 'x');
     }
     
     const onSelectChange = (selectedRowKeys: React.Key[]) => {
@@ -73,8 +94,8 @@ const UserCollection = () => {
     const AddButtons = () => {
         return <Row justify="space-between" gutter={12}>
             <Col>
-                <Button type="primary" onClick={handleOnDelete} disabled={!isSelected} className="mr-2">Delete</Button>
-                <Button type="primary" onClick={handleOnDelete} disabled={!isSelected}>Change Amount</Button>
+                <Button type="primary" onClick={handleDeleteButton} disabled={!isSelected} className="mr-2">Delete</Button>
+                <Button type="primary" onClick={handleChangeAmount} disabled={!isSelected}>Change Amount</Button>
             </Col>
             <Col>
                     <Button type="primary" onClick={() => setIsAddDialogVisible((isVisible) => !isVisible)} className="mr-2">Add Card(s)</Button>
@@ -103,7 +124,7 @@ const UserCollection = () => {
                     name="cardID"
                     rules={[{required: true}]}
                     >
-                        <Input placeholder="e.g: 3841833" value={cardName} onChange={(e) => setCardName(e.target.value)}/>
+                        <Input placeholder="e.g: 03841833" value={cardName} onChange={(e) => setCardName(e.target.value)}/>
                     </Form.Item>
                     <Form.Item
                     label="Amount"
@@ -135,7 +156,7 @@ const UserCollection = () => {
                     <Form.Item
                     name="cardList"
                     >
-                        <Input.TextArea placeholder={"3x 3841833 // to add 3 copies of 'Fluffal Bear' \nseparated by comma or line" } allowClear value={cardList} onChange={(e) => setCardList(e.target.value)}/>
+                        <Input.TextArea placeholder={"3x 3841833 // to add 3 copies of 'Fluffal Bear' \nseperated by line or comma" } allowClear value={cardList} onChange={(e) => setCardList(e.target.value)}/>
                     </Form.Item>
                 </Form>
                 

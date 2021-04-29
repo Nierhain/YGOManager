@@ -39,6 +39,11 @@ const addCardToCollection = async (id: string, amount: number, name ?: string) =
     return axios.post(collectionPath, { "name": name, "id": id, "amount": amount })
 }
 
+const addListToCollection = async (list: { id: string, amount: number }[]) => {
+    console.log(list)
+    return axios.post(collectionPath + '/list', { data: list })
+}
+
 const updateCardinCollection = async (id: string, amount: number) => {
     if (amount <= 0) {
         return axios.delete(collectionPath + '/' + id)
@@ -73,4 +78,4 @@ const searchCards = async (query: string, page?: number, limit?: number) => {
     return (await axios.get(searchPath)).data
 }
 
-export {getCards, getCard, getCollection, getAmountInCollection, getDeck, getDecks, addCardToCollection, addDeck, updateCardinCollection, updateDeck, searchCards}
+export {getCards, getCard, getCollection, getAmountInCollection, getDeck, getDecks, addCardToCollection, addListToCollection, addDeck, updateCardinCollection, updateDeck, searchCards}
