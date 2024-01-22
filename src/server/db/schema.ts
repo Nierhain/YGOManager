@@ -33,7 +33,7 @@ export const posts = createTable(
   (example) => ({
     createdByIdIdx: index("createdById_idx").on(example.createdById),
     nameIndex: index("name_idx").on(example.name),
-  })
+  }),
 );
 
 export const users = createTable("user", {
@@ -74,7 +74,7 @@ export const accounts = createTable(
       columns: [account.provider, account.providerAccountId],
     }),
     userIdIdx: index("accounts_userId_idx").on(account.userId),
-  })
+  }),
 );
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
@@ -92,7 +92,7 @@ export const sessions = createTable(
   },
   (session) => ({
     userIdIdx: index("session_userId_idx").on(session.userId),
-  })
+  }),
 );
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
@@ -108,5 +108,60 @@ export const verificationTokens = createTable(
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
-  })
+  }),
 );
+
+export const cards = createTable("cards", {
+  id: varchar("id", { length: 36 }),
+  passcode: int("passcode"),
+  name: varchar("name", { length: 255 }),
+  type: varchar("type", { length: 255 }),
+  frameType: varchar("frame_type", { length: 255 }),
+  desc: varchar("type", { length: 8000 }),
+  atk: int("atk"),
+  def: int("def"),
+  level: int("level"),
+  race: varchar("type", { length: 50 }),
+  attribute: varchar("type", { length: 50 }),
+});
+
+export const cardSets = createTable("card_sets", {
+  setName: varchar("set_name", { length: 255 }),
+  setCode: varchar("set_code", { length: 255 }),
+  setRarity: varchar("set_rarity", { length: 255 }),
+  setRarityCode: varchar("set_rarity_code", { length: 255 }),
+  setPrice: varchar("set_price", { length: 255 }),
+});
+
+export const cardImages = createTable("card_images", {
+  id: varchar("id", {length: 36}),
+  passcode: int("passcode"),
+  imageUrl: varchar("image_url", { length: 2000 }),
+  imageUrlSmall: varchar("image_url_small", { length: 2000 }),
+  imageUrlCropped: varchar("image_url_cropped", {length: 2000})
+})
+
+export const cardPrices = createTable("card_prices", {
+  id: varchar("id", { length: 36 }),
+  cardmarket: varchar("cardmarket", {length: 10}),
+  tcgplacer: varchar("tcgplayer", {length: 10}),
+  ebay: varchar("ebay", {length: 10}),
+  amazon: varchar("amazon", {length: 10}),
+  coolstuffinc: varchar("coolstuffinc", {length: 10}),
+})
+
+export const cardRelations = relations(cards, ({one, many}) => ({
+  sets: many(cardSets),
+  images: many(cardImages),
+  prices: many(cardPrices)
+}))
+
+export const collections = createTable("collections", {
+  id: varchar("id", { length: 36 }),
+  userId: varchar("userId", { length: 255 }).notNull(),
+});
+
+export const collectionRelations = relations(collections, ({ one, many }) => ({
+  cards: many(cards),
+  user: one(users, { fields: [collections.userId], references: [users.id] }),
+}));
