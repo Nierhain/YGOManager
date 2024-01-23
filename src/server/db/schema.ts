@@ -9,6 +9,7 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/mysql-core";
+import { createInsertSchema } from "drizzle-zod";
 import { type AdapterAccount } from "next-auth/adapters";
 
 /**
@@ -166,3 +167,5 @@ export const collectionRelations = relations(collections, ({ one, many }) => ({
   cards: many(cards),
   user: one(users, { fields: [collections.userId], references: [users.id] }),
 }));
+
+export const insertCardSchema = createInsertSchema(cards)
