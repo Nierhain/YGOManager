@@ -112,7 +112,7 @@ export const verificationTokens = createTable(
 );
 
 export const cards = createTable("cards", {
-  id: varchar("id", { length: 36 }),
+  id: varchar("id", { length: 36 }).primaryKey(),
   passcode: int("passcode"),
   name: varchar("name", { length: 255 }),
   type: varchar("type", { length: 255 }),
@@ -126,6 +126,7 @@ export const cards = createTable("cards", {
 });
 
 export const cardSets = createTable("card_sets", {
+  id: varchar("id", { length: 36 }).primaryKey(),
   setName: varchar("set_name", { length: 255 }),
   setCode: varchar("set_code", { length: 255 }),
   setRarity: varchar("set_rarity", { length: 255 }),
@@ -134,21 +135,21 @@ export const cardSets = createTable("card_sets", {
 });
 
 export const cardImages = createTable("card_images", {
-  id: varchar("id", {length: 36}),
+  id: varchar("id", { length: 36 }).primaryKey(),
   passcode: int("passcode"),
   imageUrl: varchar("image_url", { length: 2000 }),
   imageUrlSmall: varchar("image_url_small", { length: 2000 }),
-  imageUrlCropped: varchar("image_url_cropped", {length: 2000})
-})
+  imageUrlCropped: varchar("image_url_cropped", { length: 2000 }),
+});
 
 export const cardPrices = createTable("card_prices", {
-  id: varchar("id", { length: 36 }),
-  cardmarket: varchar("cardmarket", {length: 10}),
-  tcgplacer: varchar("tcgplayer", {length: 10}),
-  ebay: varchar("ebay", {length: 10}),
-  amazon: varchar("amazon", {length: 10}),
-  coolstuffinc: varchar("coolstuffinc", {length: 10}),
-})
+  id: varchar("id", { length: 36 }).primaryKey(),
+  cardmarket: varchar("cardmarket", { length: 10 }),
+  tcgplacer: varchar("tcgplayer", { length: 10 }),
+  ebay: varchar("ebay", { length: 10 }),
+  amazon: varchar("amazon", { length: 10 }),
+  coolstuffinc: varchar("coolstuffinc", { length: 10 }),
+});
 
 export const cardRelations = relations(cards, ({one, many}) => ({
   sets: many(cardSets),
@@ -157,7 +158,7 @@ export const cardRelations = relations(cards, ({one, many}) => ({
 }))
 
 export const collections = createTable("collections", {
-  id: varchar("id", { length: 36 }),
+  id: varchar("id", { length: 36 }).primaryKey(),
   userId: varchar("userId", { length: 255 }).notNull(),
 });
 
