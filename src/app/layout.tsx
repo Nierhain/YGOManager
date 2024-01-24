@@ -4,7 +4,7 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import { ThemeProvider } from "~/components/theme-provider";
+import { ThemeProvider } from "~/lib/components/theme-provider";
 
 export const metadata = {
   title: "YGOManager",

@@ -126,6 +126,9 @@ export const cards = createTable("cards", {
   attribute: varchar("type", { length: 50 }),
 });
 
+export type Card = typeof cards.$inferSelect;
+export type NewCard = typeof cards.$inferInsert;
+
 export const cardSets = createTable("card_sets", {
   id: varchar("id", { length: 36 }).primaryKey(),
   setName: varchar("set_name", { length: 255 }),
@@ -152,11 +155,11 @@ export const cardPrices = createTable("card_prices", {
   coolstuffinc: varchar("coolstuffinc", { length: 10 }),
 });
 
-export const cardRelations = relations(cards, ({one, many}) => ({
+export const cardRelations = relations(cards, ({ one, many }) => ({
   sets: many(cardSets),
   images: many(cardImages),
-  prices: many(cardPrices)
-}))
+  prices: many(cardPrices),
+}));
 
 export const collections = createTable("collections", {
   id: varchar("id", { length: 36 }).primaryKey(),
@@ -168,4 +171,4 @@ export const collectionRelations = relations(collections, ({ one, many }) => ({
   user: one(users, { fields: [collections.userId], references: [users.id] }),
 }));
 
-export const insertCardSchema = createInsertSchema(cards)
+export const insertCardSchema = createInsertSchema(cards);
