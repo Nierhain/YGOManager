@@ -1,6 +1,6 @@
 import { Client } from "@planetscale/database";
 import { PrismaPlanetScale } from "@prisma/adapter-planetscale";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 
 import { env } from "~/env.js";
 
@@ -19,3 +19,11 @@ export const db =
   });
 
 if (env.NODE_ENV !== "production") globalForPrisma.prisma = db;
+
+export type Card = Prisma.CardGetPayload<{
+  include: {
+    sets: true;
+    images: true;
+    prices: true;
+  };
+}>;

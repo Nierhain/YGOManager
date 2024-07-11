@@ -1,57 +1,46 @@
-import { Session } from "next-auth";
+"use client";
+
 import Link from "next/link";
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "~/lib/components/ui/avatar";
-import { Button } from "~/lib/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "~/lib/components/ui/dropdown-menu";
-import {
   NavigationMenu,
-  NavigationMenuList,
+  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "~/lib/components/ui/navigation-menu";
-import { getServerAuthSession } from "~/server/auth";
-import { api } from "~/trpc/server";
 
-export default async function Navigation() {
-  const session = await getServerAuthSession();
+const menuItems = [
+  {
+    title: "Home",
+    href: "/",
+  },
+  { title: "Cards", href: "/cards" },
+  { title: "Decks", href: "/decks" },
+  { title: "Collection", href: "/collection" },
+];
+
+export default function Navigation() {
   return (
-    <nav className="border-b">
-      <div className="flex h-16 items-center justify-between px-4">
-        <div></div>
-        {session ? (
-          <UserInfo session={session} />
-        ) : (
-          <Link href="/api/auth/signin">
-            <Button>Sign in</Button>
-          </Link>
-        )}
-      </div>
-    </nav>
+    <NavigationMenu>
+      <NavigationMenuList>
+        {menuItems.map((x) => (
+          <MenuItem title={x.title} href={x.href} key={x.title} />
+        ))}
+      </NavigationMenuList>
+    </NavigationMenu>
   );
 }
 
-function UserInfo({ session }: { session: Session }) {
+function MenuItem({ title, href }: { title: string; href: string }) {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Avatar>
-          <AvatarImage src={session.user.image ?? ""} />
-          <AvatarFallback>{session.user.name}</AvatarFallback>
-        </Avatar>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuLabel>{session.user.name}</DropdownMenuLabel>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <NavigationMenuItem>
+      <Link href={href} legacyBehavior passHref>
+        <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+          {title}
+        </NavigationMenuLink>
+      </Link>
+    </NavigationMenuItem>
   );
 }

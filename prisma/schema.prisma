@@ -44,12 +44,19 @@ model Session {
     @@index([userId])
 }
 
+enum UserRole {
+    User
+    Moderator
+    Admin
+}
+
 model User {
     id            String    @id @default(cuid())
     name          String?
     email         String?   @unique
     emailVerified DateTime?
     image         String?
+    role          UserRole @default(User)
     accounts      Account[]
     sessions      Session[]
 }
@@ -62,6 +69,13 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
+model Globals {
+    id String @id @default(cuid())
+    ygoProDbVersion String
+    ygoProDbLastUpdate DateTime
+    lastDbUpdate DateTime
+}
+
 model Card {
     id String @id @default(cuid())
     passcode Int
@@ -69,12 +83,17 @@ model Card {
     type String
     frameType String
     desc String
-    atk Int
-    def Int
-    level Int
+    atk Int @default(0)
+    def Int @default(0)
+    level Int @default(0)
     race String
     attribute String
-
+    scale Int @default(0)
+    archetype String @default("none")
+    linkval Int @default(0)
+    banTcg String @default("unlimited")
+    banOcg String @default("unlimited")
+    linkmarkers String?
     prices CardPrices[]
     sets CardSets[]
     images CardImages[]
@@ -100,6 +119,7 @@ model CardPrices {
     ebay Decimal
     amazon Decimal
     coolstuffinc Decimal
+    timestamp DateTime
 
     cardId String
     card Card @relation(fields: [cardId], references: [id], onDelete: Cascade)

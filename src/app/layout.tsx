@@ -5,6 +5,9 @@ import { GeistMono } from "geist/font/mono";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { ThemeProvider } from "~/lib/components/theme-provider";
+import Navigation from "./_components/Navigation";
+import Header from "./_components/Header";
+import Footer from "./_components/Footer";
 
 export const metadata = {
   title: "YGOManager",
@@ -27,7 +30,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <TRPCReactProvider>{children}</TRPCReactProvider>
+          <TRPCReactProvider>
+            <main className="flex h-screen w-full flex-col gap-4">
+              <Header />
+              <section className="flex-grow px-4">{children}</section>
+              <Footer />
+            </main>
+          </TRPCReactProvider>
         </ThemeProvider>
       </body>
     </html>
